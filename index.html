@@ -12,26 +12,36 @@
     <div id="app">
     </div>
     <script>
-       const vm =  Vue.createApp({
+        const vm = Vue.createApp({
             data() {
                 return {
-                    counter : 0
+                    tMinus: "-",
+                    tMax: "+",
+                    tReset: "Reset",
+                    counter: 0
+
                 };
             },
             methods: {
-                submit(e){
-                    this.counter++;                    
+                increase() {
+                    this.counter++;
+                },
+                decrease() {
+                    this.counter += this.counter <= 0 ? 0 : -1;
+                },
+                reset() {
+                    this.counter = 0;
                 }
+
             },
-            template:`
-            <form v-on:submit.prevent="submit">
-                <button>{{ counter }}</button>
-            </form>
+            template: `
+                <button v-on:click="decrease">{{ tMinus }}</button>
+                <button @:click="increase">{{ tMax }}</button>
+                <button @:click="reset">{{ tReset }}</button>
+                <p>{{ counter }}</p>
             `
 
         }).mount("#app");
-
-        console.log(vm);
 
     </script>
 
