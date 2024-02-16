@@ -15,16 +15,28 @@
        const vm =  Vue.createApp({
             data() {
                 return {
-                    attr: "src",
-                    altDesc: "dinamyc image",
-                    img: "https://picsum.photos/800/800?random=1"
+                    tMinus: "-",
+                    tMax: "+",
+                    counter : 0
                 };
             },
-            template:`<img v-bind:[attr]="img" :alt=[altDesc]>`
+            methods: {
+                increase(){
+                    this.counter++;
+                },
+                decrease(){
+                    this.counter--;
+
+                }
+
+            },
+            template:`
+                <button v-on:click="decrease">{{ tMinus }}</button>
+                <button v-on:click="increase">{{ tMax }}</button>
+                <p>{{ counter }}</p>
+            `
 
         }).mount("#app");
-
-        console.log(vm);
 
     </script>
 
