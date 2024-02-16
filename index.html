@@ -15,28 +15,23 @@
        const vm =  Vue.createApp({
             data() {
                 return {
-                    tMinus: "-",
-                    tMax: "+",
                     counter : 0
                 };
             },
             methods: {
-                increase(){
-                    this.counter++;
-                },
-                decrease(){
-                    this.counter--;
-
+                submit(e){
+                    this.counter++;                    
                 }
-
             },
             template:`
-                <button v-on:click="decrease">{{ tMinus }}</button>
-                <button v-on:click="increase">{{ tMax }}</button>
-                <p>{{ counter }}</p>
+            <form v-on:submit.prevent="submit">
+                <button>{{ counter }}</button>
+            </form>
             `
 
         }).mount("#app");
+
+        console.log(vm);
 
     </script>
 
