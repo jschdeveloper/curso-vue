@@ -9,15 +9,18 @@
 
 <body>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    <div id="app"></div>
+    <div id="app">
+    </div>
     <script>
        const vm =  Vue.createApp({
             data() {
                 return {
-                    text: "<h1>Hola vue 4 </h1>"
+                    attr: "src",
+                    altDesc: "dinamyc image",
+                    img: "https://picsum.photos/800/800?random=1"
                 };
             },
-            template: `<p v-html="text"></p>`
+            template:`<img v-bind:[attr]="img" :alt=[altDesc]>`
 
         }).mount("#app");
 
