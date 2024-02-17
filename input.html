@@ -14,12 +14,18 @@
     <script>
         const vm = Vue.createApp({
             data() {
-                return {                   
+                return {
+                    text: "Hola vue 2"
                    
                 };
             }
             ,
             template: `
+            <p>{{text}}</p>
+            <input 
+                type="text"
+                v-model="text"
+            />
             `
 
         }).mount("#app");
