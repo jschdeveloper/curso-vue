@@ -18,22 +18,14 @@
                     text: "Hola vue 2"
                    
                 };
-            },
-            methods: {
-                input(e){
-                    this.text = e.target.value
-                    console.log(this.text);
-                    //v-on:input is equals to :input 
-                    //v-bind:value is equals @:value
-                }
             }
             ,
             template: `
             <p>{{text}}</p>
             <input 
                 type="text"
-                @input="input"
-                :value="text"/>
+                v-model="text"
+            />
             `
 
         }).mount("#app");
