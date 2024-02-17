@@ -15,30 +15,25 @@
         const vm = Vue.createApp({
             data() {
                 return {
-                    tMinus: "-",
-                    tMax: "+",
-                    tReset: "Reset",
-                    counter: 0
-
+                    text: "Hola vue 2"
+                   
                 };
             },
             methods: {
-                increase() {
-                    this.counter++;
-                },
-                decrease() {
-                    this.counter += this.counter <= 0 ? 0 : -1;
-                },
-                reset() {
-                    this.counter = 0;
+                input(e){
+                    this.text = e.target.value
+                    console.log(this.text);
+                    //v-on:input is equals to :input 
+                    //v-bind:value is equals @:value
                 }
-
-            },
+            }
+            ,
             template: `
-                <button v-on:click="decrease">{{ tMinus }}</button>
-                <button @:click="increase">{{ tMax }}</button>
-                <button @:click="reset">{{ tReset }}</button>
-                <p>{{ counter }}</p>
+            <p>{{text}}</p>
+            <input 
+                type="text"
+                @input="input"
+                :value="text"/>
             `
 
         }).mount("#app");
