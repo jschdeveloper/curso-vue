@@ -213,10 +213,10 @@
                     var imageDescription = "Descripción de la imagen " + randomImage; // Cambiar por la descripción real de la imagen
                     if (!isTodayShown && date.toDateString() === today.toDateString()) {
                         item.classList.add('today');
-                        item.innerHTML = '<div>' + formattedDate + '</div><span>' + date.toDateString() + '</span><img src="https://picsum.photos/500/600?random=' + randomImage + '" alt="' + imageDescription + '" onclick="openModal(this)">'; /* Imagen aleatoria para cada día */
+                        item.innerHTML = '<div>' + formattedDate + '</div><span>' + date.toDateString() + '</span><img loading="lazy" src="https://picsum.photos/500/600?random=' + randomImage + '" alt="' + imageDescription + '" onclick="openModal(this)">'; /* Imagen aleatoria para cada día */
                         isTodayShown = true; // Marcamos que hoy ya se ha mostrado
                     } else {
-                        item.innerHTML = '<div>' + formattedDate + '</div><span>' + date.toDateString() + '</span><img src="https://picsum.photos/500/600?random=' + randomImage + '" alt="' + imageDescription + '" onclick="openModal(this)">'; /* Imagen aleatoria para cada día */
+                        item.innerHTML = '<div>' + formattedDate + '</div><span>' + date.toDateString() + '</span><img loading="lazy" src="https://picsum.photos/500/600?random=' + randomImage + '" alt="' + imageDescription + '" onclick="openModal(this)">'; /* Imagen aleatoria para cada día */
                     }
                     timeline.appendChild(item);
                 }
