@@ -5,10 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 
 <body>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
     <div id="app">
     </div>
     <script>
@@ -19,6 +21,7 @@
                     textDelete: "Delete",
                     textAdd: "Add",
                     textShow: "Show form",
+                    textNew: "New",
                     open: false,
                     username: "",
                     show: false,
@@ -54,21 +57,24 @@
                     });
                     this.title = "";
                     this.description = "";
-                }
+                    this.show = false;
+                },
+                closePopup() {
+                    this.show = false; // Ocultar el pop-up
+                    this.title = "";
+                    this.description = "";
+                },
 
             }, watch: {
                 open(value) {
                     if (value) {
-                        this.text = "Cierra sesión";
+                        this.text = "";
                         //this.styles.backgroundColor = "#b5e7a0"
                     } else {
                         this.text = "Accede a tu cuenta";
                         this.username = "";
                         //this.styles.backgroundColor = "#eca1a6"
                     }
-                },
-                show(value) {
-                    this.show = true;
                 }
             }, computed: {
                 label() {
@@ -86,33 +92,41 @@
                     <p>Hola, {{username}}</p>    
                     <div class="list" v-if="posts.length > 0" > 
                         <div v-for="(item, i) in posts" :key="i" class="item"> 
-                            <div class="title">{{item.title}} </div>
-                            <p>{{item.description}}</p>           
-                            <button @:click="deleted(i)">{{ textDelete }}</button>                            
+                            <div class="item-header">
+                                <div class="title">{{ item.title }}</div>
+                                <button @click="deleted(i)" class="delete-btn">❌</button>
+                            </div>
+                            <p>{{ item.description }}</p>       
+                                                       
                         </div>
                     </div>
                     <div v-else>
                         <h2>empty list</h2>
                     </div>
 
-                    <button @click="show = !show">{{ textAdd }}</button>
-                    <div v-if="show">
-                        <input placeholder="Title" type="text" v-model="title">
-                        <input placeholder="Description" type="text" v-model="description">   
-                        <button class="boton-add" @:click="add()">{{ textAdd }}</button>
-                     
+                    <button @click="show = !show">{{ textNew }} ➕</button>    
+
+                    <div class="popup" v-if="show">
+                        <div class="popup-content">
+                            <div class="input-container">
+                                <input type="text" id="title" placeholder="Título" class="input-field" v-model="title">
+                                <input type="text" id="description" placeholder="Descripción" class="textarea-description" v-model="description" maxlength="100" rows="4" >
+                            </div>
+                            <button class="button-add" @:click="add()">{{ textAdd }} ✔</button>
+                            <button class="button-close" @click="closePopup">Cerrar ✖</button>                     
+                        </div>
                     </div>
 
                 </div>
                 <div v-else>
                     <label>Username </label>
-                    <input type="text" v-model="username">
+                    <input type="text" placeholder="username" v-model="username">
                     
                 </div>                
 
                 <button @click="open = !open">  
-                    <div v-if="!open">Acceder</div>
-                    <div v-else>Salir</div>                
+                    <div v-if="!open">Acceder 🔑</div>
+                    <div v-else>Salir 🔐</div>                
                 </button>
             </div>
             `
@@ -120,85 +134,6 @@
         }).mount("#app");
 
     </script>
-    <style>
-        /* Estilos base */
-        html,
-        body {
-            height: 100vh;
-            margin: 0;
-            font-family: Arial, Helvetica, sans-serif;
-            background-color: #f0f0f0;
-            /* Fondo más claro */
-        }
-
-        #app,
-        .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            width: 100%;
-        }
-        .messages{
-            width: 80%;            
-        }
-
-        /* Estilo de los ítems de la lista como burbujas de chat */
-        .item {
-            background-color: #ffffff;
-            /* Fondo blanco para las burbujas de chat */
-            border: none;
-            border-radius: 20px;
-            /* Bordes redondeados */
-            padding: 10px 20px;
-            margin: 10px;
-            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
-            /* Sombra suave */
-            max-width: 80%;
-        }
-
-        .title {
-            font-weight: bold;
-        }
-
-        /* Estilos para botones */
-        button {
-            margin-top: 10px;
-            border: none;
-            background-color: #333;
-            /* Cambiado a un gris oscuro */
-            color: white;
-            padding: 8px 16px;
-            /* Reducido para hacer el botón más pequeño */
-            border-radius: 5px;
-            /* Menos redondeado para una forma más cuadrada */
-            cursor: pointer;
-            font-size: 0.9rem;
-            /* Ajustado para coincidir con el tamaño reducido del botón */
-            transition: background-color 0.3s;
-        }
-
-        button:hover {
-            background-color: #555;
-            /* Un gris oscuro más claro para el hover */
-        }
-
-        button:active {
-            background-color: #222;
-            /* Un gris aún más oscuro para el estado activo */
-        }
-
-
-        /* Estilo para el formulario y los inputs */
-        input[type="text"] {
-            padding: 10px;
-            margin: 5px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-    </style>
-
 
 </body>
 
