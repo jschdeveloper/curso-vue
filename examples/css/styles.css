@@ -1,6 +1,7 @@
 html,
 body {
-    height: 100vh;
+    height: auto; /* Cambiado de 100vh para permitir el crecimiento del contenido */
+    min-height: 100vh; /* Mantiene la altura mínima si el contenido es menor */
     margin: 0;
     font-family: Arial, Helvetica, sans-serif;
     background-color: #f0f0f0;
@@ -12,13 +13,20 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    height: 100%;
+    justify-content: flex-start; /* Cambiado a flex-start para alinear el contenido desde la parte superior */
+    min-height: 100%;
     width: 100%;
+    padding: 20px 0; /* Agregado padding para evitar que el contenido toque los bordes */
+
 }
 
 .messages {
-    width: 80%;
+   /* display: grid; /* Usando grid para organizar los ítems */
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Creando columnas que responden al tamaño del contenido */
+    gap: 10px; /* Espacio entre grid items */
+    width: 80%; /* O ajusta según sea necesario */
+    max-width: 1200px; /* Max width para evitar que los elementos se estiren demasiado en pantallas grandes */
+
 }
 
 /* Estilo de los ítems de la lista como burbujas de chat */
@@ -209,6 +217,17 @@ input[type="text"] {
     /* Ligeramente más grande al pasar el mouse */
 }
 
+.button-new{
+    margin-right: 1%;
+}
+.button-load:hover, .button-new:hover{
+    transform: scale(1.022);
+    background-color: #0056b3;
+}
+.images{
+    width: 200px;
+     height: auto;
+}
 /* Añade aquí los estilos .input-container y .input-field previamente definidos */
 
 

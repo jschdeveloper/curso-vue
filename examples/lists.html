@@ -22,38 +22,29 @@
                     textAdd: "Add",
                     textShow: "Show form",
                     textNew: "New",
+                    textLoadData: "Load API data",
                     open: false,
                     username: "",
                     show: false,
                     title: "",
                     description: "",
+                    url : "",
                     posts: [
-                        {
-                            title: "titulo 1",
-                            description: "Lorem ipsu"
-                        },
-                        {
-                            title: "titulo 2",
-                            description: "Lorem ipsu"
-                        },
-                        {
-                            title: "titulo 3",
-                            description: "Lorem ipsu"
-                        },
-                        {
-                            title: "titulo 4",
-                            description: "Lorem ipsu"
-                        },
-                    ]
+                    ],
+
                 };
             }, methods: {
                 deleted(index) {
+                    console.log("to deleted --> " + this.posts[index].id);
                     this.posts.splice(index, 1);
                 },
                 add() {
+                    let size = this.posts[this.posts.length - 1].id + 1;
                     this.posts.push({
                         title: this.title,
-                        description: this.description
+                        description: this.description,
+                        image: this.url,
+                        id: size
                     });
                     this.title = "";
                     this.description = "";
@@ -64,11 +55,31 @@
                     this.title = "";
                     this.description = "";
                 },
+                loadData() {
+                    fetch('https://api.sampleapis.com/coffee/hot')
+                        .then(response => {
+                            // Verifica si la respuesta es exitosa
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! status: ${response.status}`);
+                            }
+                            return response.json(); // Convierte la respuesta en JSON
+                        })
+                        .then(data => {
+                            this.posts = data;
+                            
+                        })
+                        .catch(error => {
+                            console.error('Error fetching data: ', error); // Maneja cualquier error que ocurra durante la solicitud o procesamiento de datos
+                        });
+                    console.log(JSON.stringify(this.posts)); // Muestra el título de cada café
+
+                }
 
             }, watch: {
                 open(value) {
                     if (value) {
                         this.text = "";
+                        this.loadData();
                         //this.styles.backgroundColor = "#b5e7a0"
                     } else {
                         this.text = "Accede a tu cuenta";
@@ -87,30 +98,47 @@
             ,
             template: `
             <div class="container"> 
+                
+                <div v-if="open" class="menu">
+                    <button class="button-new" @click="show = !show">{{ textNew }} ➕</button>   
+                    <button v-if="open" @click="open = !open">  Salir 🔐 </button>
+                    <button class="button-load" @click="loadData()">{{ textLoadData }} 🔎</button>    
+                </div>
+
+                
+                
                 <h2> {{text}} </h2>
+                
                 <div class="messages" v-if="open">
                     <p>Hola, {{username}}</p>    
                     <div class="list" v-if="posts.length > 0" > 
-                        <div v-for="(item, i) in posts" :key="i" class="item"> 
+                        
+                        <div v-for="(coffee, i) in posts" :key="i" class="item"> 
                             <div class="item-header">
-                                <div class="title">{{ item.title }}</div>
+                                {{ coffee.id }}
+                                <div class="title">{{ coffee.title }}</div>
                                 <button @click="deleted(i)" class="delete-btn">❌</button>
-                            </div>
-                            <p>{{ item.description }}</p>       
-                                                       
+                            </div>                            
+                            <p>{{ coffee.description }}</p>       
+                            <img :src="coffee.image" alt="Coffee Image" class="images">
                         </div>
                     </div>
                     <div v-else>
                         <h2>empty list</h2>
                     </div>
 
-                    <button @click="show = !show">{{ textNew }} ➕</button>    
+                    <div>
+                        <button class="button-new" @click="show = !show">{{ textNew }} ➕</button>   
+                        
+                        <button class="button-load" @click="loadData()">{{ textLoadData }} 🔎</button>    
+                    </div>
 
                     <div class="popup" v-if="show">
                         <div class="popup-content">
                             <div class="input-container">
                                 <input type="text" id="title" placeholder="Título" class="input-field" v-model="title">
                                 <input type="text" id="description" placeholder="Descripción" class="textarea-description" v-model="description" maxlength="100" rows="4" >
+                                <input type="text" id="url" placeholder="url" class="input-field" v-model="url">
                             </div>
                             <button class="button-add" @:click="add()">{{ textAdd }} ✔</button>
                             <button class="button-close" @click="closePopup">Cerrar ✖</button>                     
@@ -120,15 +148,10 @@
                 </div>
                 <div v-else>
                     <label>Username </label>
-                    <input type="text" placeholder="username" v-model="username">
-                    
-                </div>                
-
-                <button @click="open = !open">  
-                    <div v-if="!open">Acceder 🔑</div>
-                    <div v-else>Salir 🔐</div>                
-                </button>
+                    <input type="text" placeholder="username" v-model="username">                    
+                </div>
             </div>
+            <button v-if="!open" @click="open = !open">  Acceder 🔑</button>
             `
 
         }).mount("#app");
