@@ -42,9 +42,6 @@
                             description: "Lorem ipsu"
                         },
                     ]
-                    /*styles: {
-                        backgroundColor: "#e5e5e5"
-                    }*/
                 };
             }, methods: {
                 deleted(index) {
@@ -79,30 +76,30 @@
                 },
                 styles() {
                     return this.open ? ['open'] : ['closed']
-                },
-                show() {
-
                 }
             }
             ,
             template: `
-            <div class="container" :class="styles"> 
+            <div class="container"> 
                 <h2> {{text}} </h2>
-                <div v-if="open">
+                <div class="messages" v-if="open">
                     <p>Hola, {{username}}</p>    
-                    <div class="list"> 
+                    <div class="list" v-if="posts.length > 0" > 
                         <div v-for="(item, i) in posts" :key="i" class="item"> 
                             <div class="title">{{item.title}} </div>
                             <p>{{item.description}}</p>           
                             <button @:click="deleted(i)">{{ textDelete }}</button>                            
                         </div>
                     </div>
+                    <div v-else>
+                        <h2>empty list</h2>
+                    </div>
 
                     <button @click="show = !show">{{ textAdd }}</button>
                     <div v-if="show">
                         <input placeholder="Title" type="text" v-model="title">
                         <input placeholder="Description" type="text" v-model="description">   
-                        <button @:click="add()">{{ textAdd }}</button>
+                        <button class="boton-add" @:click="add()">{{ textAdd }}</button>
                      
                     </div>
 
@@ -124,51 +121,81 @@
 
     </script>
     <style>
+        /* Estilos base */
         html,
         body {
             height: 100vh;
             margin: 0;
             font-family: Arial, Helvetica, sans-serif;
+            background-color: #f0f0f0;
+            /* Fondo más claro */
         }
 
         #app,
         .container {
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            flex-direction: column;
-            width: 100%;
+            justify-content: center;
             height: 100%;
+            width: 100%;
+        }
+        .messages{
+            width: 80%;            
         }
 
-        button {
-            margin-top: 24px;
-            border: none;
-            background-color: rgb(255, 255, 255);
-            padding: 8px 24px;
-            border-radius: 12px;
-        }
-
-        .closed {
-            background-color: #eca1a6;
-        }
-
-        .open {
-            background-color: #b5e7a0;
-        }
-
-        .list {
-            display: flex;
-            flex-direction: column;
-        }
-
+        /* Estilo de los ítems de la lista como burbujas de chat */
         .item {
-            border: 1px solid black;
+            background-color: #ffffff;
+            /* Fondo blanco para las burbujas de chat */
+            border: none;
+            border-radius: 20px;
+            /* Bordes redondeados */
+            padding: 10px 20px;
+            margin: 10px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+            /* Sombra suave */
+            max-width: 80%;
         }
 
         .title {
             font-weight: bold;
-            font-size: 1.2rem;
+        }
+
+        /* Estilos para botones */
+        button {
+            margin-top: 10px;
+            border: none;
+            background-color: #333;
+            /* Cambiado a un gris oscuro */
+            color: white;
+            padding: 8px 16px;
+            /* Reducido para hacer el botón más pequeño */
+            border-radius: 5px;
+            /* Menos redondeado para una forma más cuadrada */
+            cursor: pointer;
+            font-size: 0.9rem;
+            /* Ajustado para coincidir con el tamaño reducido del botón */
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #555;
+            /* Un gris oscuro más claro para el hover */
+        }
+
+        button:active {
+            background-color: #222;
+            /* Un gris aún más oscuro para el estado activo */
+        }
+
+
+        /* Estilo para el formulario y los inputs */
+        input[type="text"] {
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
         }
     </style>
 
