@@ -1,7 +1,9 @@
 html,
 body {
-    height: auto; /* Cambiado de 100vh para permitir el crecimiento del contenido */
-    min-height: 100vh; /* Mantiene la altura mínima si el contenido es menor */
+    height: auto;
+    /* Cambiado de 100vh para permitir el crecimiento del contenido */
+    min-height: 100vh;
+    /* Mantiene la altura mínima si el contenido es menor */
     margin: 0;
     font-family: Arial, Helvetica, sans-serif;
     background-color: #f0f0f0;
@@ -13,28 +15,36 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start; /* Cambiado a flex-start para alinear el contenido desde la parte superior */
+    justify-content: flex-start;
+    /* Cambiado a flex-start para alinear el contenido desde la parte superior */
     min-height: 100%;
     width: 100%;
-    padding: 20px 0; /* Agregado padding para evitar que el contenido toque los bordes */
+    padding: 20px 0;
+    /* Agregado padding para evitar que el contenido toque los bordes */
 
 }
 
 .messages {
-   /* display: grid; /* Usando grid para organizar los ítems */
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Creando columnas que responden al tamaño del contenido */
-    gap: 10px; /* Espacio entre grid items */
-    width: 80%; /* O ajusta según sea necesario */
-    max-width: 1200px; /* Max width para evitar que los elementos se estiren demasiado en pantallas grandes */
+    /* display: grid; /* Usando grid para organizar los ítems */
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    /* Creando columnas que responden al tamaño del contenido */
+    gap: 10px;
+    /* Espacio entre grid items */
+    width: 80%;
+    /* O ajusta según sea necesario */
+    max-width: 1200px;
+    /* Max width para evitar que los elementos se estiren demasiado en pantallas grandes */
 
 }
 
 /* Estilo de los ítems de la lista como burbujas de chat */
-.item {
-    border: 1px solid #ccc;
+.item,
+.popup-content {
+    background-color: #f9f9f9;
+    border: 1px solid #e1e1e1;
+    border-radius: 5px;
     padding: 10px;
     margin-bottom: 10px;
-    border-radius: 5px;
 }
 
 .item-header {
@@ -46,7 +56,8 @@ body {
 .title {
     font-weight: bold;
     font-size: 1.2rem;
-    margin: 0; /* Asegúrate de que no haya margen extra que pueda afectar la alineación */
+    margin: 0;
+    /* Asegúrate de que no haya margen extra que pueda afectar la alineación */
 }
 
 .delete-btn {
@@ -54,7 +65,8 @@ body {
     background-color: transparent;
     cursor: pointer;
     font-size: 1rem;
-    padding: 0; /* Elimina el relleno predeterminado para que el botón sea más pequeño */
+    padding: 0;
+    /* Elimina el relleno predeterminado para que el botón sea más pequeño */
 }
 
 /* Estilos para botones */
@@ -217,17 +229,45 @@ input[type="text"] {
     /* Ligeramente más grande al pasar el mouse */
 }
 
-.button-new{
+.button-new {
     margin-right: 1%;
 }
-.button-load:hover, .button-new:hover{
+
+.button-load:hover,
+.button-new:hover {
     transform: scale(1.022);
     background-color: #0056b3;
 }
-.images{
+
+.images {
     width: 200px;
-     height: auto;
+    height: auto;
 }
+
+.popup {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.popup-buttons{    
+    
+    justify-content: center;
+}
+
 /* Añade aquí los estilos .input-container y .input-field previamente definidos */
 
 

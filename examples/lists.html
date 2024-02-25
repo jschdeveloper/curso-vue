@@ -28,9 +28,14 @@
                     show: false,
                     title: "",
                     description: "",
-                    url : "",
-                    posts: [
-                    ],
+                    url: "",
+                    posts: [],
+                    imagePopup: false, // Controla la visibilidad de la ventana emergente de la imagen
+                    selectedImage: '', // Almacena la URL de la imagen seleccionada
+                    selectedTitle: '', // Almacena el título del ítem seleccionado
+                    selectedDescription: '', // Almacena la descripción del ítem seleccionado
+
+
 
                 };
             }, methods: {
@@ -48,6 +53,7 @@
                     });
                     this.title = "";
                     this.description = "";
+                    this.url = "";
                     this.show = false;
                 },
                 closePopup() {
@@ -66,14 +72,23 @@
                         })
                         .then(data => {
                             this.posts = data;
-                            
+
                         })
                         .catch(error => {
                             console.error('Error fetching data: ', error); // Maneja cualquier error que ocurra durante la solicitud o procesamiento de datos
                         });
                     console.log(JSON.stringify(this.posts)); // Muestra el título de cada café
 
-                }
+                },
+                openImagePopup(coffee) {
+                    this.selectedImage = coffee.image;
+                    this.selectedTitle = coffee.title;
+                    this.selectedDescription = coffee.description;
+                    this.imagePopup = true; // Muestra la ventana emergente
+                },
+                closeImagePopup() {
+                    this.imagePopup = false; // Oculta la ventana emergente
+                },
 
             }, watch: {
                 open(value) {
@@ -120,17 +135,11 @@
                                 <button @click="deleted(i)" class="delete-btn">❌</button>
                             </div>                            
                             <p>{{ coffee.description }}</p>       
-                            <img :src="coffee.image" alt="Coffee Image" class="images">
+                            <img :src="coffee.image" alt="Coffee Image" class="images" @click="openImagePopup(coffee)">
                         </div>
                     </div>
                     <div v-else>
                         <h2>empty list</h2>
-                    </div>
-
-                    <div>
-                        <button class="button-new" @click="show = !show">{{ textNew }} ➕</button>   
-                        
-                        <button class="button-load" @click="loadData()">{{ textLoadData }} 🔎</button>    
                     </div>
 
                     <div class="popup" v-if="show">
@@ -152,6 +161,20 @@
                 </div>
             </div>
             <button v-if="!open" @click="open = !open">  Acceder 🔑</button>
+
+            
+            <div class="popup" v-if="imagePopup" @click="closePopup">
+                <div class="popup-content"  @click.stop> 
+                    
+                    <h3>{{ selectedTitle }}</h3>
+                    <p>{{ selectedDescription }}</p>
+                    <img :src="selectedImage" alt="Selected Image" class="images" >
+                    <div class="popup-buttons">
+                        <button @click="closeImagePopup">✖</button>
+                    </div>
+                </div>
+            </div>
+
             `
 
         }).mount("#app");
