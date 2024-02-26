@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket-Travel</title>
+    <style>
+        :root {
+            --background-light: #ddd;
+            /* Fondo claro */
+            --background-dark: #333;
+            /* Fondo oscuro */
+            --text-light: #000;
+            /* Texto claro */
+            --text-dark: #fff;
+            /* Texto oscuro */
+            --primary-color: green;
+            /* Color principal */
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-light);
+            color: var(--primary-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Estilos para dark mode */
+        body.dark-mode {
+            background-color: var(--background-dark);
+            color: var(--text-dark);
+        }
+
+        header,
+        footer {
+            background-color: var(--background-light);
+            color: var(--primary-color);
+            padding: 10px 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.dark-mode header,
+        body.dark-mode footer {
+            background-color: var(--background-dark);
+            color: var(--text-dark);
+        }
+
+        /* Otros estilos permanecen igual */
+
+        /* Establecimiento de fuentes y colores base */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /* Fuente moderna */
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            /* Fondo claro */
+            color: #333;
+            /* Texto oscuro para contraste */
+        }
+
+        /* Encabezado fijo con sombra para dar sensación de profundidad */
+        header {
+            background-color: #fff;
+            color: #333;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 10px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Navegación centrada y espaciada */
+        nav {
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        /* Enlaces estilizados para mejorar la navegabilidad */
+        nav a {
+            margin: 0 15px;
+            text-decoration: none;
+            color: #007bff;
+            /* Color azul para enlaces */
+            font-weight: 500;
+        }
+
+        /* Espaciado del contenido principal para no solaparse con el encabezado */
+        .content {
+            margin-top: 60px;
+            /* Ajuste según la altura del header */
+            padding: 20px;
+            background-color: var(--background-light);
+            /* Fondo blanco para el contenido */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            color: var(--primary-color);
+        }
+         /* Estilos para dark mode */
+        .content.dark-mode {
+            background-color: var(--background-dark);
+            color: var(--text-dark);
+        }
+
+        /* Pie de página fijo con diseño consistente */
+        footer {
+            background-color: #fff;
+            color: #333;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            padding: 10px 0;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Modal para imágenes con animación suave */
+        .image-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.8);
+            transition: all 0.5s ease;
+        }
+
+        .image-modal-content {
+            margin: 5% auto;
+            display: block;
+            max-width: 80%;
+            max-height: 80%;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            color: #fff;
+            font-size: 35px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <nav>
+            <a href="#quienes-somos">Quiénes somos</a>
+            <a href="#proximos-viajes">Próximos viajes</a>
+            <a href="#redes-sociales">Redes sociales</a>
+        </nav>
+        <button id="modeToggle">Dark Mode</button>
+    </header>
+
+
+    <div class="content">
+        <div class="timeline" id="timeline"></div>
+    </div>
+
+    <footer>
+        <a href="#"><img src="instagram_logo.png" alt="Instagram"></a>
+        <a href="#"><img src="tiktok_logo.png" alt="TikTok"></a>
+        <a href="#"><img src="facebook_logo.png" alt="Facebook"></a>
+        <a href="#"><img src="whatsapp_logo.png" alt="WhatsApp"></a>
+    </footer>
+
+    <div id="imageModal" class="image-modal">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <img class="image-modal-content" id="img01">
+        <div id="caption"></div>
+    </div>
+
+    <script>
+        document.getElementById('modeToggle').addEventListener('click', function () {
+            document.body.classList.toggle('dark-mode');
+            var modeText = document.body.classList.contains('dark-mode') ? 'Light Mode' : 'Dark Mode';
+            this.textContent = modeText;
+        });
+
+        // Función para obtener el número de días en un mes y año dados
+        function daysInMonth(month, year) {
+            return new Date(year, month, 0).getDate();
+        }
+
+        // Función para generar la línea de tiempo
+        function generateTimeline() {
+            var today = new Date();
+            var currentYear = today.getFullYear();
+
+            var timeline = document.getElementById('timeline');
+            var isTodayShown = false; // Flag para evitar que se muestre hoy más de una vez
+
+            for (var month = 1; month <= 12; month++) {
+                var daysInThisMonth = daysInMonth(month, currentYear);
+                for (var day = 1; day <= daysInThisMonth; day++) {
+                    var date = new Date(currentYear, month - 1, day);
+                    var dayOfWeek = date.getDay();
+                    var dayName = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'][dayOfWeek];
+                    var monthName = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'][month - 1];
+                    var formattedDate = dayName + ', ' + day + ' ' + monthName;
+
+                    var item = document.createElement('div');
+                    item.classList.add('timeline-item');
+                    var randomImage = Math.floor(Math.random() * 1000);
+                    var imageDescription = "Descripción de la imagen " + randomImage; // Cambiar por la descripción real de la imagen
+                    if (!isTodayShown && date.toDateString() === today.toDateString()) {
+                        item.classList.add('today');
+                        item.innerHTML = '<div>' + formattedDate + '</div><span>' + date.toDateString() + '</span><img loading="lazy" src="https://picsum.photos/500/600?random=' + randomImage + '" alt="' + imageDescription + '" onclick="openModal(this)">'; /* Imagen aleatoria para cada día */
+                        isTodayShown = true; // Marcamos que hoy ya se ha mostrado
+                    } else {
+                        item.innerHTML = '<div>' + formattedDate + '</div><span>' + date.toDateString() + '</span><img loading="lazy" src="https://picsum.photos/500/600?random=' + randomImage + '" alt="' + imageDescription + '" onclick="openModal(this)">'; /* Imagen aleatoria para cada día */
+                    }
+                    timeline.appendChild(item);
+                }
+            }
+        }
+
+        // Llama a la función para generar la línea de tiempo
+        generateTimeline();
+
+        // Función para abrir el visualizador de imágenes
+        function openModal(img) {
+            var modal = document.getElementById('imageModal');
+            var modalImg = document.getElementById('img01');
+            var captionText = document.getElementById('caption');
+            modal.style.display = "block";
+            modalImg.src = img.src;
+            captionText.innerHTML = img.alt;
+        }
+
+        // Función para cerrar el visualizador de imágenes
+        function closeModal() {
+            var modal = document.getElementById('imageModal');
+            modal.style.display = "none";
+        }
+
+        // Cerrar el modal al hacer clic fuera de él
+        window.onclick = function (event) {
+            var modal = document.getElementById('imageModal');
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+
+</body>
+
+</html>

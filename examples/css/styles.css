@@ -1,0 +1,279 @@
+html,
+body {
+    height: auto;
+    /* Cambiado de 100vh para permitir el crecimiento del contenido */
+    min-height: 100vh;
+    /* Mantiene la altura mínima si el contenido es menor */
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f0f0f0;
+    /* Fondo más claro */
+}
+
+#app,
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    /* Cambiado a flex-start para alinear el contenido desde la parte superior */
+    min-height: 100%;
+    width: 100%;
+    padding: 20px 0;
+    /* Agregado padding para evitar que el contenido toque los bordes */
+
+}
+
+.messages {
+    /* display: grid; /* Usando grid para organizar los ítems */
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    /* Creando columnas que responden al tamaño del contenido */
+    gap: 10px;
+    /* Espacio entre grid items */
+    width: 80%;
+    /* O ajusta según sea necesario */
+    max-width: 1200px;
+    /* Max width para evitar que los elementos se estiren demasiado en pantallas grandes */
+
+}
+
+/* Estilo de los ítems de la lista como burbujas de chat */
+.item,
+.popup-content {
+    background-color: #f9f9f9;
+    border: 1px solid #e1e1e1;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.title {
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin: 0;
+    /* Asegúrate de que no haya margen extra que pueda afectar la alineación */
+}
+
+.delete-btn {
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0;
+    /* Elimina el relleno predeterminado para que el botón sea más pequeño */
+}
+
+/* Estilos para botones */
+button {
+    margin-top: 10px;
+    border: none;
+    background-color: #333;
+    /* Cambiado a un gris oscuro */
+    color: white;
+    padding: 8px 16px;
+    /* Reducido para hacer el botón más pequeño */
+    border-radius: 5px;
+    /* Menos redondeado para una forma más cuadrada */
+    cursor: pointer;
+    font-size: 0.9rem;
+    /* Ajustado para coincidir con el tamaño reducido del botón */
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #555;
+    /* Un gris oscuro más claro para el hover */
+}
+
+button:active {
+    background-color: #222;
+    /* Un gris aún más oscuro para el estado activo */
+}
+
+
+/* Estilo para el formulario y los inputs */
+input[type="text"] {
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.boton-eliminar {
+    background-color: #333;
+    /* Color oscuro */
+    color: white;
+    /* Texto blanco */
+    border: none;
+    /* Sin borde */
+    padding: 5px 10px;
+    /* Padding reducido */
+    border-radius: 4px;
+    /* Esquinas ligeramente redondeadas */
+    cursor: pointer;
+    /* Cursor de puntero para indicar que es clickeable */
+    font-size: 14px;
+    /* Tamaño de fuente reducido */
+    display: inline-flex;
+    /* Para centrar el ícono y el texto */
+    align-items: center;
+    /* Centrado vertical del contenido */
+    justify-content: center;
+    /* Centrado horizontal del contenido */
+}
+
+.boton-eliminar:hover {
+    background-color: #555;
+    /* Oscurecer el botón al pasar el mouse */
+}
+
+.boton-eliminar:active {
+    background-color: #222;
+    /* Botón aún más oscuro al hacer clic */
+}
+
+.boton-eliminar .icono-basura {
+    margin-right: 5px;
+    /* Espacio entre el ícono y el texto */
+}
+
+.input-container {
+    display: flex;
+    flex-direction: column;
+    max-width: 600px;
+    /* Ancho máximo para el contenedor */
+    width: 100%;
+    /* Ancho responsivo */
+    margin: auto;
+    /* Centrado horizontal */
+    gap: 10px;
+    /* Espacio entre los inputs */
+}
+
+.input-field {
+    padding: 10px;
+    /* Espaciado interno para hacer el input más grande */
+    border-radius: 5px;
+    /* Bordes redondeados */
+    border: 1px solid #ccc;
+    /* Borde sutil */
+    font-size: 16px;
+    /* Tamaño de letra legible */
+    outline: none;
+    /* Remover el borde al enfocar */
+}
+
+.input-field:focus {
+    border-color: #4a90e2;
+    /* Cambiar el color del borde al enfocar */
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+    /* Sombra suave alrededor del input enfocado */
+}
+
+.popup {
+    position: fixed;
+    /* Fijar el pop-up sobre el contenido */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    /* Centrar horizontalmente */
+    align-items: center;
+    /* Centrar verticalmente */
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Fondo semitransparente */
+}
+
+.popup-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* Sombra suave */
+    width: 90%;
+    max-width: 500px;
+    /* Máximo ancho del contenido del pop-up */
+}
+
+.button-add {
+    background-color: #007BFF;
+    margin-right: 10px;
+    /* Azul */
+}
+
+.button-add:hover {
+    background-color: #0056b3;
+    /* Azul oscuro al pasar el mouse */
+    transform: scale(1.05);
+    /* Ligeramente más grande al pasar el mouse */
+}
+
+/* Estilo para el botón Cerrar */
+.button-close {
+    background-color: #a10212;
+    /* Rojo */
+}
+
+.button-close:hover {
+    background-color: #bb2d3b;
+    /* Rojo oscuro al pasar el mouse */
+    transform: scale(1.05);
+    /* Ligeramente más grande al pasar el mouse */
+}
+
+.button-new {
+    margin-right: 1%;
+}
+
+.button-load:hover,
+.button-new:hover {
+    transform: scale(1.022);
+    background-color: #0056b3;
+}
+
+.images {
+    width: 200px;
+    height: auto;
+}
+
+.popup {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.popup-buttons{    
+    
+    justify-content: center;
+}
+
+/* Añade aquí los estilos .input-container y .input-field previamente definidos */
+
+
+@media (max-width: 768px) {
+    .input-container {
+        width: 90%;
+        /* Ancho más pequeño para pantallas más pequeñas */
+    }
+}

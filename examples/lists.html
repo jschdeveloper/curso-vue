@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+    <div id="app">
+    </div>
+    <script>
+        const vm = Vue.createApp({
+            data() {
+                return {
+                    text: "Accede a tu cuenta",
+                    textDelete: "Delete",
+                    textAdd: "Add",
+                    textShow: "Show form",
+                    textNew: "New",
+                    textLoadData: "Load API data",
+                    open: false,
+                    username: "",
+                    show: false,
+                    title: "",
+                    description: "",
+                    url: "",
+                    posts: [],
+                    imagePopup: false, // Controla la visibilidad de la ventana emergente de la imagen
+                    selectedImage: '', // Almacena la URL de la imagen seleccionada
+                    selectedTitle: '', // Almacena el título del ítem seleccionado
+                    selectedDescription: '', // Almacena la descripción del ítem seleccionado
+
+
+
+                };
+            }, methods: {
+                deleted(index) {
+                    console.log("to deleted --> " + this.posts[index].id);
+                    this.posts.splice(index, 1);
+                },
+                add() {
+                    let size = this.posts[this.posts.length - 1].id + 1;
+                    this.posts.push({
+                        title: this.title,
+                        description: this.description,
+                        image: this.url,
+                        id: size
+                    });
+                    this.title = "";
+                    this.description = "";
+                    this.url = "";
+                    this.show = false;
+                },
+                closePopup() {
+                    this.show = false; // Ocultar el pop-up
+                    this.title = "";
+                    this.description = "";
+                },
+                loadData() {
+                    fetch('https://api.sampleapis.com/coffee/hot')
+                        .then(response => {
+                            // Verifica si la respuesta es exitosa
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! status: ${response.status}`);
+                            }
+                            return response.json(); // Convierte la respuesta en JSON
+                        })
+                        .then(data => {
+                            this.posts = data;
+
+                        })
+                        .catch(error => {
+                            console.error('Error fetching data: ', error); // Maneja cualquier error que ocurra durante la solicitud o procesamiento de datos
+                        });
+                    console.log(JSON.stringify(this.posts)); // Muestra el título de cada café
+
+                },
+                openImagePopup(coffee) {
+                    this.selectedImage = coffee.image;
+                    this.selectedTitle = coffee.title;
+                    this.selectedDescription = coffee.description;
+                    this.imagePopup = true; // Muestra la ventana emergente
+                },
+                closeImagePopup() {
+                    this.imagePopup = false; // Oculta la ventana emergente
+                },
+
+            }, watch: {
+                open(value) {
+                    if (value) {
+                        this.text = "";
+                        this.loadData();
+                        //this.styles.backgroundColor = "#b5e7a0"
+                    } else {
+                        this.text = "Accede a tu cuenta";
+                        this.username = "";
+                        //this.styles.backgroundColor = "#eca1a6"
+                    }
+                }
+            }, computed: {
+                label() {
+                    return this.open ? "Cerrar" : "Abrir";
+                },
+                styles() {
+                    return this.open ? ['open'] : ['closed']
+                }
+            }
+            ,
+            template: `
+            <div class="container"> 
+                
+                <div v-if="open" class="menu">
+                    <button class="button-new" @click="show = !show">{{ textNew }} ➕</button>   
+                    <button v-if="open" @click="open = !open">  Salir 🔐 </button>
+                    <button class="button-load" @click="loadData()">{{ textLoadData }} 🔎</button>    
+                </div>
+
+                
+                
+                <h2> {{text}} </h2>
+                
+                <div class="messages" v-if="open">
+                    <p>Hola, {{username}}</p>    
+                    <div class="list" v-if="posts.length > 0" > 
+                        
+                        <div v-for="(coffee, i) in posts" :key="i" class="item"> 
+                            <div class="item-header">
+                                {{ coffee.id }}
+                                <div class="title">{{ coffee.title }}</div>
+                                <button @click="deleted(i)" class="delete-btn">❌</button>
+                            </div>                            
+                            <p>{{ coffee.description }}</p>       
+                            <img :src="coffee.image" alt="Coffee Image" class="images" @click="openImagePopup(coffee)">
+                        </div>
+                    </div>
+                    <div v-else>
+                        <h2>empty list</h2>
+                    </div>
+
+                    <div class="popup" v-if="show">
+                        <div class="popup-content">
+                            <div class="input-container">
+                                <input type="text" id="title" placeholder="Título" class="input-field" v-model="title">
+                                <input type="text" id="description" placeholder="Descripción" class="textarea-description" v-model="description" maxlength="100" rows="4" >
+                                <input type="text" id="url" placeholder="url" class="input-field" v-model="url">
+                            </div>
+                            <button class="button-add" @:click="add()">{{ textAdd }} ✔</button>
+                            <button class="button-close" @click="closePopup">Cerrar ✖</button>                     
+                        </div>
+                    </div>
+
+                </div>
+                <div v-else>
+                    <label>Username </label>
+                    <input type="text" placeholder="username" v-model="username">                    
+                </div>
+            </div>
+            <button v-if="!open" @click="open = !open">  Acceder 🔑</button>
+
+            
+            <div class="popup" v-if="imagePopup" @click="closePopup">
+                <div class="popup-content"  @click.stop> 
+                    
+                    <h3>{{ selectedTitle }}</h3>
+                    <p>{{ selectedDescription }}</p>
+                    <img :src="selectedImage" alt="Selected Image" class="images" >
+                    <div class="popup-buttons">
+                        <button @click="closeImagePopup">✖</button>
+                    </div>
+                </div>
+            </div>
+
+            `
+
+        }).mount("#app");
+
+    </script>
+
+</body>
+
+</html>
